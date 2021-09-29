@@ -1,0 +1,199 @@
+{% load timedelta_format %}
+
+<!doctype html>
+<html lang="sv">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+    <title>Nån på ETA?</title>
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            font-weight: 500;
+        }
+
+        .container {
+            margin-top: 1rem;
+        }
+
+        h1,
+        h2,
+        p {
+            text-align: center;
+            margin: 0;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-size: 3rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+        }
+
+        .green {
+            color: #14cc1e;
+        }
+
+        .yellow {
+            color: #dfc800;
+        }
+
+        .red {
+            color: #cc1442;
+        }
+
+        .container {
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .legend {
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+
+        .marker {
+            width: 2px;
+            height: 0.5rem;
+            position: absolute;
+            bottom: 0.5rem;
+            background-color: rgb(182, 182, 182);
+            /* idk why this has to be here since it's already defined for <body>, but doesn't work without this */
+            font-weight: 500;
+        }
+
+        .tall {
+            height: 1rem;
+        }
+
+        .time {
+            position: absolute;
+            width: 100rem;
+        }
+
+        th {
+            height: 100%;
+        }
+
+        thead tr {
+            background-color: #ffffff !important;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        table {
+            border-spacing: 0;
+        }
+
+        .day {
+            margin: 0 1rem;
+        }
+
+        .chart {
+            width: 100%;
+            position: relative;
+        }
+
+        .block {
+            background-color: rgb(47, 122, 207);
+            height: 3rem;
+            position: absolute;
+            top: 0.25rem;
+            border-radius: 0.3rem;
+        }
+
+        tr {
+            height: 3.5rem;
+        }
+
+        tr:nth-child(odd) {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h2>Är det nån på ETA?</h2>
+        {% if status == "yes" %}
+        <h1 class="green">JA!</h1>
+        <p> ETA har varit öppet i {{ duration|timedelta_format }} (sedan {{ start }}) </p>
+        {% elif status == "maybe" %}
+        <h1 class="yellow">KANSKE?</h1>
+        <p>Jag har inte fått någon ping från ETA på över 90 sekunder, så det är möjligt att någon precis lämnade. Sist
+            någon öppnade ETA var {{ start }}</p>
+        {% elif status == "no" %}
+        <h1 class="red">NEJ!</h1>
+        <p>ETA har tyvärr vart övergivet sen {{ end }}, hela {{ duration|timedelta_format }}!</p>
+        {% endif %}
+
+
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th>
+                        <div class="legend">
+                            <div class="marker tall" style="left: 0%;"></div>
+                            <div class="time" style="left: calc(0% - 50rem);">00:00</div>
+                            <div class="marker" style="left: 4.166666666666666%;"></div>
+                            <div class="marker" style="left: 8.333333333333332%;"></div>
+                            <div class="marker" style="left: 12.5%;"></div>
+                            <div class="marker" style="left: 16.666666666666664%;"></div>
+                            <div class="marker" style="left: 20.833333333333336%;"></div>
+                            <div class="marker tall" style="left: 25%;"></div>
+                            <div class="time" style="left: calc(25% - 50rem);">06:00</div>
+                            <div class="marker" style="left: 29.166666666666668%;"></div>
+                            <div class="marker" style="left: 33.33333333333333%;"></div>
+                            <div class="marker" style="left: 37.5%;"></div>
+                            <div class="marker" style="left: 41.66666666666667%;"></div>
+                            <div class="marker" style="left: 45.83333333333333%;"></div>
+                            <div class="marker tall" style="left: 50%;"></div>
+                            <div class="time" style="left: calc(50% - 50rem);">12:00</div>
+                            <div class="marker" style="left: 54.166666666666664%;"></div>
+                            <div class="marker" style="left: 58.333333333333336%;"></div>
+                            <div class="marker" style="left: 62.5%;"></div>
+                            <div class="marker" style="left: 66.66666666666666%;"></div>
+                            <div class="marker" style="left: 70.83333333333334%;"></div>
+                            <div class="marker tall" style="left: 75%;"></div>
+                            <div class="time" style="left: calc(75% - 50rem);">18:00</div>
+                            <div class="marker" style="left: 79.16666666666666%;"></div>
+                            <div class="marker" style="left: 83.33333333333334%;"></div>
+                            <div class="marker" style="left: 87.5%;"></div>
+                            <div class="marker" style="left: 91.66666666666666%;"></div>
+                            <div class="marker" style="left: 95.83333333333334%;"></div>
+                            <div class="marker tall" style="left: 100%;"></div>
+                            <div class="time" style="left: calc(100% - 50rem);">24:00</div>
+                        </div>
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for day, ranges in days.items %}
+                <tr>
+                    <td><span class="day">{{ day }}</span></td>
+                    <td class="chart">
+                        {% for range in ranges %}
+                        <div class="block" style="left: {{ range.0 }}%; right: {{ range.1 }}%;"></div>
+                        {% endfor %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+    </div>
+
+</body>
+
+</html>

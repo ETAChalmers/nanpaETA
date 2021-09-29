@@ -1,0 +1,18 @@
+version: "3"
+services:
+  web:
+    build: .
+    ports:
+      - "50006:80"
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=nanpaeta
+      - POSTGRES_PASSWORD=password
+
+volumes:
+  db-data:
