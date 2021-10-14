@@ -162,10 +162,21 @@
         tr:nth-child(odd) {
             background-color: #f0f0f0;
         }
+
+        #esd_sticker {
+            position: absolute;
+            width: 20%;
+            top: 10%;
+            right: 4%;
+
+            transform: rotate(30deg);
+        }
     </style>
 </head>
 
 <body>
+    <img id="esd_sticker" src="/?esd_image=1">
+    </img>
     <div class="container">
         <h2>Är det nån på ETA?</h2>
         {% if status == "yes" %}
