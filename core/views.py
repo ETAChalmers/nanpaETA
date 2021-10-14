@@ -19,8 +19,8 @@ def index(request):
 
 
     agent = request.META['HTTP_USER_AGENT'].lower()
-    if ("firefox" not in agent and "curl" not in agent) and random.random() < 1.1:
-        return redirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+    if ("firefox" not in agent and "curl" not in agent) and random.random() < 0.1:
+        return redirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ", permanent=False)
 
     timezone.activate("europe/stockholm")
 
