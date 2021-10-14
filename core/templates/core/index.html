@@ -111,6 +111,32 @@
             top: 0.25rem;
             border-radius: 0.3rem;
         }
+        .block:not(:hover) .hoverer {
+            opacity: 0%;
+        }
+        .hoverer {
+            background: rgb(122, 207, 47);
+            opacity: 100%;
+            transition: opacity 0.2s ease;
+
+            display: flex;
+            justify-content: center; /* align horizontal */
+            align-items: center; /* align vertical */
+
+            position: relative;
+            top: -110%;
+            left: 50%;
+            height: 100%;
+            transform: translateX(-50%);
+
+            width: 7em;
+            margin: 0 1em;
+            height: 100%;
+            border-radius: 0.3rem;
+            pointer-events: none;
+            z-index: 1001;
+        }
+
 
         tr {
             height: 3.5rem;
@@ -184,7 +210,11 @@
                     <td><span class="day">{{ day }}</span></td>
                     <td class="chart">
                         {% for range in ranges %}
-                        <div class="block" style="left: {{ range.0 }}%; right: {{ range.1 }}%;"></div>
+                        <div class="block" style="left: {{ range.start_prec }}%; right: {{ range.end_prec }}%;">
+                            <div class="hoverer">
+                                {{ range.start_time }} - {{ range.end_time }}
+                            </div>
+                        </div>
                         {% endfor %}
                     </td>
                 </tr>

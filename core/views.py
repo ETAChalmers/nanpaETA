@@ -57,7 +57,12 @@ def index(request):
         endseconds = end.second + end.minute * 60 + end.hour * 3600
         startpercent = startseconds / (60 * 60 * 24) * 100
         endpercent = 100 - (endseconds / (60 * 60 * 24) * 100)
-        days[r.start_time.date()].append([startpercent, endpercent])
+        days[r.start_time.date()].append({
+            "start_prec": startpercent,
+            "end_prec": endpercent,
+            "start_time": f"{start.hour:02}:{start.minute:02}",
+            "end_time": f"{end.hour:02}:{end.minute:02}",
+        })
 
     return render(
         request,
