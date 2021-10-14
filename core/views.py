@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.shortcuts import render
 from .models import TimeRange
 
+DEFAULT_DAYS_SHOWN = 7
 
 def index(request):
     timezone.activate("europe/stockholm")
@@ -30,11 +31,13 @@ def index(request):
     else:
         status = "no"
 
+    n_days = int(request.GET.get("days", DEFAULT_DAYS_SHOWN))
+
     ranges = [
         r
         for ranges in TimeRange.objects.filter(
             start_time__gt=now.date()
-            - timezone.timedelta(days=int(request.GET.get("days", 14)) - 1)
+            - timezone.timedelta(days=n_days - 1)
         )
         for r in ranges.split()
     ]
@@ -48,7 +51,7 @@ def index(request):
         (timezone.now() - timezone.timedelta(days=i))
         .astimezone(pytz.timezone("europe/stockholm"))
         .date(): []
-        for i in range(int(request.GET.get("days", 14)))
+        for i in range(n_days)
     }
     for r in ranges:
         start = r.start_time.time()
@@ -74,5 +77,6 @@ def index(request):
             "duration": timezone.now()
             - (lastrange.end_time if status == "no" else lastrange.start_time),
             "days": days,
+            "n_days": n_days,
         },
     )
