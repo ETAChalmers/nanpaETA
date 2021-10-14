@@ -179,6 +179,7 @@
         <h1 class="red">NEJ!</h1>
         <p>ETA har tyvärr vart övergivet sen {{ end }}, hela {{ duration|timedelta_format }}!</p>
         {% endif %}
+        <p>De senaste {{ n_days }} dagarna har ETA varit öppen {{ total_open_prec }}% av tiden! </p>
 
 
         <table>

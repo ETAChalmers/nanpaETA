@@ -53,6 +53,7 @@ def index(request):
         .date(): []
         for i in range(n_days)
     }
+    total_open = 0.0
     for r in ranges:
         start = r.start_time.time()
         end = r.end_time.time()
@@ -66,6 +67,7 @@ def index(request):
             "start_time": f"{start.hour:02}:{start.minute:02}",
             "end_time": f"{end.hour:02}:{end.minute:02}",
         })
+        total_open += ((100 - endpercent) - startpercent) / n_days
 
     return render(
         request,
@@ -78,5 +80,6 @@ def index(request):
             - (lastrange.end_time if status == "no" else lastrange.start_time),
             "days": days,
             "n_days": n_days,
+            "total_open_prec": f"{total_open:.3}",
         },
     )
