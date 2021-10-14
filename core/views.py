@@ -45,6 +45,7 @@ def index(request):
         status = "no"
 
     n_days = int(request.GET.get("days", DEFAULT_DAYS_SHOWN))
+    n_days = max(1, min(n_days, 1000))
 
     ranges = [
         r
