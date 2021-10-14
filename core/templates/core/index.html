@@ -106,31 +106,36 @@
 
         .block {
             background-color: rgb(47, 122, 207);
-            height: 3rem;
             position: absolute;
             top: 0.25rem;
+            bottom: 0.25rem;
             border-radius: 0.3rem;
         }
+        .block:hover {
+            border: 3px solid rgb(122, 207, 47);
+        }
         .block:not(:hover) .hoverer {
+            height: 0%;
             opacity: 0%;
+            box-sizing: border-box;
         }
         .hoverer {
             background: rgb(122, 207, 47);
             opacity: 100%;
-            transition: opacity 0.2s ease;
+            transition-property: height opacity;
+            transition-duration: 0.2s;
+            transition-timing-function: ease;
 
             display: flex;
             justify-content: center; /* align horizontal */
             align-items: center; /* align vertical */
 
-            position: relative;
+            position: absolute;
             top: -110%;
-            left: 50%;
             height: 100%;
-            transform: translateX(-50%);
+            left: calc(50% - 3.5em);
 
             width: 7em;
-            margin: 0 1em;
             height: 100%;
             border-radius: 0.3rem;
             pointer-events: none;
