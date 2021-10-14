@@ -1,14 +1,18 @@
 import pytz
+import random
 from collections import defaultdict
 from ipware import get_client_ip
 from django.http import HttpResponse
 from django.utils import timezone
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import TimeRange
 
 DEFAULT_DAYS_SHOWN = 7
 
 def index(request):
+    if "firefox" not in request.META['HTTP_USER_AGENT'].lower() and random.random() < 0.1:
+        return redirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ")
+
     timezone.activate("europe/stockholm")
 
     ip = get_client_ip(request)[0]
