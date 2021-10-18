@@ -289,7 +289,7 @@
                             <div class="future" style="left: {{ now_percent}}%; right: 0%;"></div>
                         {% endif %}
                         {% for range in ranges %}
-                        <div class="block {% if range.closed_start %} closed_start {% endif %} {% if range.closed_end %} closed_end {% endif %}" style="left: {{ range.start_prec }}%; right: {{ range.end_prec }}%;">
+                        <div class="block{% if not range.closed_start %} open_start{% endif %}{% if not range.closed_end %} open_end{% endif %}{% if range.is_now %} is_now{% endif %}" style="left: {{ range.start_prec }}%; right: {{ range.end_prec }}%;">
                             <div class="hoverer">
                                 {{ range.start_time }} - {{ range.end_time }}
                             </div>
