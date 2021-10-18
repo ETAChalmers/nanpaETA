@@ -291,7 +291,7 @@
                         {% for range in ranges %}
                         <div class="block{% if not range.closed_start %} open_start{% endif %}{% if not range.closed_end %} open_end{% endif %}{% if range.is_now %} is_now{% endif %}" style="left: {{ range.start_prec }}%; right: {{ range.end_prec }}%;">
                             <div class="hoverer">
-                                {{ range.start_time }} - {{ range.end_time }}
+                                {{ range.start_time }} - {% if range.is_now %} nu {% else %} {{ range.end_time }} {% endif %}
                             </div>
                         </div>
                         {% endfor %}
