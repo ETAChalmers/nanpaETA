@@ -47,5 +47,16 @@ class TimeRange(models.Model):
 
         return results
 
+    def closed_start(self):
+        start = self.start_time.astimezone(pytz.timezone("europe/stockholm"))
+        return start.time() != datetime.time.min
+
+    def closed_end(self):
+        end = self.end_time.astimezone(pytz.timezone("europe/stockholm"))
+        delta = datetime.datetime.now().astimezone(pytz.timezone("europe/stockholm")) - end
+        if delta < timezone.timedelta(minutes=1.5):
+            return False
+        return end.time() != datetime.time.max
+
     def __str__(self):
         return f"{self.start_time.isoformat()} - {self.end_time.isoformat()}"

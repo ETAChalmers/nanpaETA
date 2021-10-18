@@ -81,6 +81,8 @@ def index(request):
             "end_prec": endpercent,
             "start_time": f"{start.hour:02}:{start.minute:02}",
             "end_time": f"{end.hour:02}:{end.minute:02}",
+            "closed_start": r.closed_start(),
+            "closed_end": r.closed_end(),
         })
         total_open += ((100 - endpercent) - startpercent) / n_days
 
