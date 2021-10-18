@@ -116,6 +116,7 @@
         .chart {
             width: 100%;
             position: relative;
+            height: 100%;
         }
 
         .block {
@@ -123,15 +124,42 @@
             position: absolute;
             top: 0.25rem;
             bottom: 0.25rem;
-        }
-        .block.closed_start {
-            border-radius: 0.3rem 0 0 0.3rem;
-        }
-        .block.closed_end {
-            border-radius: 0 0.3rem 0.3rem 0;
-        }
-        .block.closed_start.closed_end {
+
             border-radius: 0.3rem;
+        }
+        .block.is_now {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        .block.open_start {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        .block.open_start::before {
+            content: "";
+            background-color: blue;
+            position: absolute;
+            right: 100%;
+            width: 0.2rem;
+            top: 0px;
+            bottom: 0px;
+            background: repeating-linear-gradient(45deg, #2f7acf, #2f7acf 5px, #ffffff 5px, #ffffff 10px);
+            border-radius: 0.25rem 0 0 0.25rem;
+        }
+        .block.open_end {
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+        .block.open_end::after {
+            content: "";
+            background-color: blue;
+            position: absolute;
+            left: 100%;
+            width: 0.2rem;
+            top: 0px;
+            bottom: 0px;
+            background: repeating-linear-gradient(45deg, #2f7acf, #2f7acf 5px, #ffffff 5px, #ffffff 10px);
+            border-radius: 0 0.25rem 0.25rem 0;
         }
         .block:hover {
             border: 3px solid rgb(122, 207, 47);
@@ -175,11 +203,8 @@
 
         .future {
             position: absolute;
-            /* top: 0.25rem;
+            top: 0.25rem;
             bottom: 0.25rem;
-            */
-            top: 0rem;
-            bottom: 0rem;
             border-radius: 0rem 0.3rem 0.3rem 0rem;
 
             background: repeating-linear-gradient(45deg, #d0d0d0, #d0d0d0 20px, #b0b0b0 20px, #b0b0b0 25px);
