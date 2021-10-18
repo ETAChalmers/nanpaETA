@@ -253,7 +253,7 @@
                     <td><span class="day">{{ day }}</span></td>
                     <td class="chart">
                         {% if forloop.counter == 1 %}
-                            <div class="future" style="left: 60%; right: 0%;"></div>
+                            <div class="future" style="left: {{ now_percent}}%; right: 0%;"></div>
                         {% endif %}
                         {% for range in ranges %}
                         <div class="block" style="left: {{ range.start_prec }}%; right: {{ range.end_prec }}%;">

@@ -83,6 +83,10 @@ def index(request):
         })
         total_open += ((100 - endpercent) - startpercent) / n_days
 
+    now = timezone.now().astimezone(pytz.timezone("europe/stockholm"))
+    now_seconds = now.second + now.minute * 60 + now.hour * 3600
+    now_percent = now_seconds / (60 * 60 * 24) * 100
+
     return render(
         request,
         "core/index.html",
@@ -95,5 +99,6 @@ def index(request):
             "days": days,
             "n_days": n_days,
             "total_open_prec": f"{total_open:.3}",
+            "now_percent": now_percent,
         },
     )
