@@ -165,6 +165,18 @@
             background-color: #f0f0f0;
         }
 
+        .future {
+            position: absolute;
+            /* top: 0.25rem;
+            bottom: 0.25rem;
+            */
+            top: 0rem;
+            bottom: 0rem;
+            border-radius: 0rem 0.3rem 0.3rem 0rem;
+
+            background: repeating-linear-gradient(45deg, #d0d0d0, #d0d0d0 20px, #b0b0b0 20px, #b0b0b0 25px);
+        }
+
         #esd_sticker {
             position: absolute;
             width: 20%;
@@ -240,6 +252,9 @@
                 <tr>
                     <td><span class="day">{{ day }}</span></td>
                     <td class="chart">
+                        {% if forloop.counter == 1 %}
+                            <div class="future" style="left: 60%; right: 0%;"></div>
+                        {% endif %}
                         {% for range in ranges %}
                         <div class="block" style="left: {{ range.start_prec }}%; right: {{ range.end_prec }}%;">
                             <div class="hoverer">
