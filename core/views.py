@@ -68,7 +68,7 @@ def index(request):
         .date(): []
         for i in range(n_days)
     }
-    total_open = 0.0
+    total_open_prec = 0.0
     for r in ranges:
         start = r.start_time.time()
         end = r.end_time.time()
@@ -85,11 +85,14 @@ def index(request):
             "closed_end": r.closed_end(),
             "is_now": r.is_now(),
         })
-        total_open += ((100 - endpercent) - startpercent) / n_days
+        total_open_prec += (100 - endpercent) - startpercent
 
     now = timezone.now().astimezone(pytz.timezone("europe/stockholm"))
     now_seconds = now.second + now.minute * 60 + now.hour * 3600
-    now_percent = now_seconds / (60 * 60 * 24) * 100
+    now_ratio = now_seconds / (60 * 60 * 24)
+
+    total_days = n_days - now_ratio
+    open_prec = total_open_prec / total_days
 
     return render(
         request,
@@ -102,7 +105,7 @@ def index(request):
             - (lastrange.end_time if status == "no" else lastrange.start_time),
             "days": days,
             "n_days": n_days,
-            "total_open_prec": f"{total_open:.3}",
-            "now_percent": now_percent,
+            "total_open_prec": f"{open_prec:.3}",
+            "now_percent": now_ratio * 100,
         },
     )
