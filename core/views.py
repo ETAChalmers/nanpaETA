@@ -91,7 +91,7 @@ def index(request):
     now_seconds = now.second + now.minute * 60 + now.hour * 3600
     now_ratio = now_seconds / (60 * 60 * 24)
 
-    total_days = n_days - now_ratio
+    total_days = n_days - (1 - now_ratio)
     open_prec = total_open_prec / total_days
 
     return render(
