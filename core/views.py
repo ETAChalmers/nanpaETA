@@ -5,24 +5,15 @@ from ipware import get_client_ip
 from django.http import HttpResponse
 from django.utils import timezone
 from django.shortcuts import render, redirect
+from core.templatetags.timedelta_format import timedelta_format
 from .models import TimeRange
 from . import images
+import json
+import datetime
 
 DEFAULT_DAYS_SHOWN = 7
 
-def index(request):
-    give_image = int(request.GET.get("esd_image", 0))
-    if give_image == 1:
-        return HttpResponse(
-            images.ESD_PROTECTION,
-            content_type="image/png",
-        )
-
-
-    agent = request.META['HTTP_USER_AGENT'].lower()
-    if ("firefox" not in agent and "curl" not in agent) and random.random() < 0.1:
-        return redirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ", permanent=False)
-
+def template_data(request):
     timezone.activate("europe/stockholm")
 
     ip = get_client_ip(request)[0]
@@ -94,18 +85,60 @@ def index(request):
     total_days = n_days - (1 - now_ratio)
     open_prec = total_open_prec / total_days
 
+    return {
+        "status": status,
+        "start": lastrange.start_time,
+        "end": lastrange.end_time,
+        "duration": timezone.now()
+        - (lastrange.end_time if status == "no" else lastrange.start_time),
+        "days": days,
+        "n_days": n_days,
+        "total_open_prec": f"{open_prec:.3}",
+        "now_percent": now_ratio * 100,
+    }
+
+def index(request):
+    give_image = int(request.GET.get("esd_image", 0))
+    if give_image == 1:
+        return HttpResponse(
+            images.ESD_PROTECTION,
+            content_type="image/png",
+        )
+
+
+    agent = request.META['HTTP_USER_AGENT'].lower()
+    if ("firefox" not in agent and "curl" not in agent) and random.random() < 0.1:
+        return redirect("https://www.youtube.com/watch?v=dQw4w9WgXcQ", permanent=False)
+
     return render(
         request,
         "core/index.html",
-        {
-            "status": status,
-            "start": lastrange.start_time,
-            "end": lastrange.end_time,
-            "duration": timezone.now()
-            - (lastrange.end_time if status == "no" else lastrange.start_time),
-            "days": days,
-            "n_days": n_days,
-            "total_open_prec": f"{open_prec:.3}",
-            "now_percent": now_ratio * 100,
-        },
+        template_data(request),
+    )
+
+def jsonize(x):
+    try:
+        json.dumps(x)
+        return x
+    except TypeError as _:
+        if isinstance(x, dict):
+            out = dict()
+            for k, v in x.items():
+                out[repr(k)] = jsonize(v)
+            return out
+        elif isinstance(x, list):
+            out = []
+            for v in x:
+                out.append(jsonize(v))
+            return out
+        elif isinstance(x, datetime.timedelta):
+            return timedelta_format(x)
+        else:
+            return repr(x)
+
+def status(request):
+    data = jsonize(template_data(request))
+    return HttpResponse(
+        content=json.dumps(data),
+        content_type="application/json",
     )
