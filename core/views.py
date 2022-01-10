@@ -124,7 +124,7 @@ def jsonize(x):
         if isinstance(x, dict):
             out = dict()
             for k, v in x.items():
-                out[repr(k)] = jsonize(v)
+                out[str(k)] = jsonize(v)
             return out
         elif isinstance(x, list):
             out = []
