@@ -13,12 +13,13 @@ import datetime
 
 DEFAULT_DAYS_SHOWN = 7
 
-def template_data(request):
+def trigger_update(request):
     timezone.activate("europe/stockholm")
 
     ip = get_client_ip(request)[0]
     lastrange = TimeRange.objects.last()
     now = timezone.now().astimezone(pytz.timezone("europe/stockholm"))
+
     if ip == "129.16.13.37":
         if now - lastrange.end_time < timezone.timedelta(minutes=5):
             lastrange.end_time = now
@@ -28,6 +29,12 @@ def template_data(request):
             lastrange = TimeRange(start_time=now, end_time=now)
 
         lastrange.save()
+
+def template_data(request):
+    timezone.activate("europe/stockholm")
+
+    lastrange = TimeRange.objects.last()
+    now = timezone.now().astimezone(pytz.timezone("europe/stockholm"))
 
     if now - lastrange.end_time < timezone.timedelta(minutes=1.5):
         status = "yes"
@@ -98,6 +105,7 @@ def template_data(request):
     }
 
 def index(request):
+    trigger_update(request)
     give_image = int(request.GET.get("esd_image", 0))
     if give_image == 1:
         return HttpResponse(
