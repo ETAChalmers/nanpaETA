@@ -19,7 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 DEBUG = os.environ.get("DEV") == "true"
 
-ALLOWED_HOSTS = ["127.0.0.1", "eta.mateuszdrwal.com"]
+ALLOWED_HOSTS = ["127.0.0.1", "eta.mateuszdrwal.com", "eta.sk6ab.se", "nanpa.sk6ab.se"]
 
 
 INSTALLED_APPS = [
