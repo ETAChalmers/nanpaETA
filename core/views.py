@@ -102,6 +102,7 @@ def template_data(request):
         "n_days": n_days,
         "total_open_prec": f"{open_prec:.3}",
         "now_percent": now_ratio * 100,
+        "ip": get_client_ip(request)[0]
     }
 
 def index(request):

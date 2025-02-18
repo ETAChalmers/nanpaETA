@@ -226,7 +226,9 @@
     </img>
     <div class="container">
         <h2>Är det nån på ETA?</h2>
-        {% if status == "yes" %}
+        {% if ip == "129.16.13.37" %}
+        <h1 class="green">JA DUMFAN!</h1>
+        {% elif status == "yes" %}
         <h1 class="green">JA!</h1>
         <p> ETA har varit öppet i {{ duration|timedelta_format }} (sedan {{ start }}) </p>
         {% elif status == "maybe" %}
